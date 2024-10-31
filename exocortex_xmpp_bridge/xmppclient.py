@@ -139,7 +139,8 @@ class XMPPClient(ClientXMPP):
         self.add_event_handler("no_auth", self.no_auth)
         self.add_event_handler("session_start", self.session_start)
         self.add_event_handler("message", self.message)
-        self.add_event_handler("disconnected", self.on_disconnect)
+        # disable unstable code
+        #self.add_event_handler("disconnected", self.on_disconnect)
 
         # Start the /replies processing task now that we're logged in.
         self.schedule("replies_processor", 1, self.process_replies_queue,
@@ -147,13 +148,13 @@ class XMPPClient(ClientXMPP):
 
     # Fires when the construct isn't able to authenticate with the server.
     def failed_auth(self, event):
-        logging.critical("Unable to authenticate with the JID " + self.username)
+        logging.critical("Unable to authenticate with the JID " + self.boundjid.user)
         return
 
     # Fires when all authentication methods available to the construct have
     # failed.
     def no_auth(self, event):
-        logging.critical("All authentication methods for the JID %s have failed." % self.username)
+        logging.critical("All authentication methods for the JID %s have failed." % self.boundjid.user)
         return
 
     # Fires whenever an XMPP session starts.  Just about anything can go in
@@ -316,7 +317,7 @@ Individual constructs may have their own online help, so try sending the command
     # internal state is consistent) and then start it up again.
     def on_disconnect(self, event):
         logging.debug("Entering XMPPClient.on_disconnect().")
-        logging.info("Connection to XMPP server disappeared.  Attempting to reconnect to JID %s." % self.username)
+        logging.info("Connection to XMPP server disappeared.  Attempting to reconnect to JID %s." % self.boundjid.user)
 
         # This holds the random period of time the bot will sleep during
         # reconnection attempts.  It's kept in a variable because the value
