@@ -342,7 +342,7 @@ Individual constructs may have their own online help, so try sending the command
             # get back on the local wireless network and then re-negotiate a
             # VPN connection.  This can take a while from the user's (and thus
             # the bot's) point of view.
-            random_sleep = random.rantint(1, 10)
+            random_sleep = random.randint(1, 10)
             logging.debug("Going to sleep for %s seconds." % random_sleep)
             time.sleep(random_sleep)
             logging.debug("Woke up after %s seconds." % random_sleep)
