@@ -240,11 +240,14 @@ xmpp_client = xmppclient.XMPPClient(username, password, owner)
 # Register some XEP plugins.
 xmpp_client.register_plugin('xep_0030') # Service discovery
 xmpp_client.register_plugin('xep_0078') # Legacy authentication
-xmpp_client.register_plugin('xep_0199') # XMPP ping
+xmpp_client.register_plugin(
+    'xep_0199',
+    {'keepalive': True, 'interval': 30, 'timeout': 10},
+) # XMPP ping
 
 # Connect to the XMPP server and start processing message streams.
 xmpp_client.connect()
-xmpp_client.loop.run_forever()
+xmpp_client.process()
 
 # Fin.
 sys.exit(0)
